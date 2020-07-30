@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/scatter_plot/static/js/main.728232aa.chunk.js",
-    "main.js.map": "/scatter_plot/static/js/main.728232aa.chunk.js.map",
+    "main.js": "/scatter_plot/static/js/main.03678f00.chunk.js",
+    "main.js.map": "/scatter_plot/static/js/main.03678f00.chunk.js.map",
     "runtime-main.js": "/scatter_plot/static/js/runtime-main.b54f4f1e.js",
     "runtime-main.js.map": "/scatter_plot/static/js/runtime-main.b54f4f1e.js.map",
-    "static/js/2.80210044.chunk.js": "/scatter_plot/static/js/2.80210044.chunk.js",
-    "static/js/2.80210044.chunk.js.map": "/scatter_plot/static/js/2.80210044.chunk.js.map",
+    "static/js/2.97a70f3a.chunk.js": "/scatter_plot/static/js/2.97a70f3a.chunk.js",
+    "static/js/2.97a70f3a.chunk.js.map": "/scatter_plot/static/js/2.97a70f3a.chunk.js.map",
     "index.html": "/scatter_plot/index.html",
-    "precache-manifest.49e7e6a5be648225ee49727129a66608.js": "/scatter_plot/precache-manifest.49e7e6a5be648225ee49727129a66608.js",
+    "precache-manifest.e213436cb7fa7c364ec3b59fbf2dc7b7.js": "/scatter_plot/precache-manifest.e213436cb7fa7c364ec3b59fbf2dc7b7.js",
     "service-worker.js": "/scatter_plot/service-worker.js",
-    "static/js/2.80210044.chunk.js.LICENSE.txt": "/scatter_plot/static/js/2.80210044.chunk.js.LICENSE.txt"
+    "static/js/2.97a70f3a.chunk.js.LICENSE.txt": "/scatter_plot/static/js/2.97a70f3a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.b54f4f1e.js",
-    "static/js/2.80210044.chunk.js",
-    "static/js/main.728232aa.chunk.js"
+    "static/js/2.97a70f3a.chunk.js",
+    "static/js/main.03678f00.chunk.js"
   ]
 }
