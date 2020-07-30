@@ -146,19 +146,6 @@ class Draw extends Component {
     return (
       <svg width={width} height={height}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
-          {
-            <g>
-              <line
-                x1="0"
-                y1={plotHeight - 5}
-                x2={plotWidth}
-                y2={plotHeight - 5}
-                stroke="black"
-              />
-              <line x1="0" y1={plotHeight - 5} x2="0" y2="0" stroke="black" />
-            </g>
-          }
-
           {dataPlot.map((item, i) => {
             return (
               <g
