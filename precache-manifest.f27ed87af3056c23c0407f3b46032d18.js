@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "dd38de1abbba8eb548628b76d9fb794e",
+    "revision": "a2c74d342b484fab8e9241fe810606e3",
     "url": "/scatter_plot/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/scatter_plot/static/js/2.97a70f3a.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "3db0ebf7d72eb015ff9d",
-    "url": "/scatter_plot/static/js/main.03678f00.chunk.js"
+    "revision": "2b8fa8d794473fb14dc1",
+    "url": "/scatter_plot/static/js/main.4aa2f8e5.chunk.js"
   },
   {
     "revision": "18e853a0973eba98e893",
