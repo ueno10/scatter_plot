@@ -11,14 +11,23 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const dataPath = "./data/plot_test_data.json";
+    const dataPath = "./data/plot_test_data_10.json";
     window
       .fetch(dataPath)
       .then((response) => response.json())
       .then((data) => {
+        data = data.filter((item) => {
+          return (
+            item.word === "開発" ||
+            item.word === "学校" ||
+            item.word === "支援" ||
+            item.word === "日本" ||
+            item.word === "文化" ||
+            item.word === "海外"
+          );
+        });
         this.setState({ data });
       });
-    //drawCluster();
   }
 
   render() {
@@ -28,100 +37,133 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <WordPlot data={data} />
+        <Draw data={data} />
       </div>
     );
   }
 }
 
-class WordPlot extends Component {
+class Draw extends Component {
   constructor(props) {
     super(props);
     this.state = {
       word: "",
+      data: null,
     };
   }
+
+  componentDidMount() {
+    const dendrogramDataPath = `./data/dendrogramData/${this.state.word}.json`;
+    window
+      .fetch(dendrogramDataPath)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ data });
+      });
+  }
+
   render() {
-    const data = this.props.data;
-    console.log(data);
-    const contentWidth = 500;
-    const contentHeight = 500;
+    const dendrogramDataPath = `./data/dendrogramData/${this.state.word}.json`;
+    window
+      .fetch(dendrogramDataPath)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ data });
+      });
+    const { data } = this.state;
+    const data_j = data;
+    if (data_j != null) {
+      console.log(data_j);
+    }
+
+    const dataPlot = this.props.data;
+
+    console.log(this.state);
+    const contentWidth = 1200; // 全体
+    const contentHeight = 3000; //　全体
+
+    const plotWidth = 300;
+    const plotHeight = 300;
     const margin = {
-      left: 80,
+      left: 15,
       right: 100,
       top: 20,
-      bottom: 80,
+      bottom: 60,
     };
+
     const width = contentWidth + margin.left + margin.right;
     const height = contentHeight + margin.top + margin.bottom;
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const xScale = d3
+    const xScaleP = d3
       .scaleLinear()
-      .domain([d3.min(data, (item) => item.x), d3.max(data, (item) => item.x)])
-      .range([0, contentWidth])
+      .domain([
+        d3.min(dataPlot, (item) => item.x),
+        d3.max(dataPlot, (item) => item.x),
+      ])
+      .range([0, plotWidth])
       .nice();
 
-    const yScale = d3
+    const yScaleP = d3
       .scaleLinear()
-      .domain([d3.max(data, (item) => item.y), d3.min(data, (item) => item.y)])
-      .range([0, contentHeight - 5])
+      .domain([
+        d3.max(dataPlot, (item) => item.y),
+        d3.min(dataPlot, (item) => item.y),
+      ])
+      .range([0, plotHeight - 5])
       .nice();
+
+    //
+    let xScaleD;
+    let testData;
+    if (data_j != null) {
+      xScaleD = d3
+        .scaleLinear()
+        .domain([
+          d3.max(data_j, (item) => item.height),
+          d3.min(data_j, (item) => item.height),
+        ])
+        .range([plotWidth + margin.left, contentWidth - 150]);
+
+      const stratify = d3
+        .stratify()
+        .id((d) => d.name)
+        .parentId((d) => d.parent);
+      const data_stratify = stratify(data_j);
+      const root = d3.hierarchy(data_stratify);
+
+      const cluster = d3
+        .cluster()
+        .size([contentHeight, contentWidth - plotWidth - margin.left - 150]);
+      cluster(root);
+
+      testData = root.descendants();
+    }
+
+    console.log(testData);
 
     return (
       <svg width={width} height={height}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
-          {xScale.ticks().map((x) => {
-            return (
-              <g transform={`translate(${xScale(x)},0)`}>
-                <line
-                  x1="0"
-                  y1={contentHeight - 5}
-                  x2="0"
-                  y2={contentHeight}
-                  stroke="black"
-                />
-                <text y={contentHeight + 20} textAnchor="middle">
-                  {x}
-                </text>
-              </g>
-            );
-          })}
-          {yScale.ticks().map((y) => {
-            return (
-              <g transform={`translate(0,${yScale(y)})`}>
-                <line x1="-5" y1="0" x2="0" y2="0" stroke="black" />
-                <text x="-20" y="5" textAnchor="middle">
-                  {y}
-                </text>
-              </g>
-            );
-          })}
           {
             <g>
               <line
                 x1="0"
-                y1={contentHeight - 5}
-                x2={contentWidth}
-                y2={contentHeight - 5}
+                y1={plotHeight - 5}
+                x2={plotWidth}
+                y2={plotHeight - 5}
                 stroke="black"
               />
-              <line
-                x1="0"
-                y1={contentHeight - 5}
-                x2="0"
-                y2="0"
-                stroke="black"
-              />
+              <line x1="0" y1={plotHeight - 5} x2="0" y2="0" stroke="black" />
             </g>
           }
 
-          {data.map((item, i) => {
+          {dataPlot.map((item, i) => {
             return (
               <g
                 key={i}
-                onClick={() => {
+                onMouseOver={() => {
                   this.setState({ word: item.word });
                 }}
               >
@@ -129,8 +171,8 @@ class WordPlot extends Component {
                 <title>{`word:${item.word}`}</title>
                 <circle
                   style={{ cursor: "pointer" }}
-                  cx={xScale(item.x)}
-                  cy={yScale(item.y)}
+                  cx={xScaleP(item.x)}
+                  cy={yScaleP(item.y)}
                   r="5"
                   fill={color(item.color)}
                 />
@@ -138,11 +180,50 @@ class WordPlot extends Component {
             );
           })}
           {
-            <text x={contentWidth} y="0">
+            <text x={plotWidth} y="0">
               {this.state.word}
             </text>
           }
         </g>
+        {data_j != null ? (
+          <g transform={`translate(100, ${margin.top})`}>
+            {testData.slice(1).map((item) => {
+              return (
+                <path
+                  className="link"
+                  d={`M${xScaleD(item.data.data.height)},${item.x}
+                      L${xScaleD(item.parent.data.data.height)},${item.x}
+                      L${xScaleD(item.parent.data.data.height)},${
+                    item.parent.x
+                  }`}
+                />
+              );
+            })}
+            {testData.map((item, i) => {
+              return (
+                <g
+                  key={i}
+                  transform={`translate(${xScaleD(item.data.data.height)},${
+                    item.x
+                  })`}
+                >
+                  <circle r="1" fill="#555"></circle>
+                  <text
+                    dy="5"
+                    x={item.children ? -10 : 5}
+                    y="-4"
+                    font-size="30%"
+                    textAnchor={item.children ? "end" : "start"}
+                  >
+                    {item.children ? null : item.data.data["事業名"]}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        ) : (
+          <text>loading</text>
+        )}
       </svg>
     );
   }
